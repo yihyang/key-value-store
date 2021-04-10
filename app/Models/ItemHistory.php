@@ -10,6 +10,18 @@ class ItemHistory extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'value' => 'json'
+    ];
+
+    protected $fillable = [
+        'item_id',
+        'user_id',
+        'timestamp',
+        'value',
+    ];
+
+
     /**
      * Item that this history record belongs to
      *

@@ -22,7 +22,7 @@ class ItemController extends Controller
         if (!$objectValue) {
             return response()->json(
               [
-                'error' => 'Item with provided key not found'
+                'error' => 'Object not found'
               ],
               404
             );

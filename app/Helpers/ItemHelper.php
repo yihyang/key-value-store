@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\Item;
+use App\Models\ItemHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -24,9 +25,10 @@ class ItemHelper
 
         return Cache::remember($cacheKey, self::CACHE_DURATION, function() use ($key, $timestamp) {
             if ($timestamp) {
-                $object = Item::firstWhere([
-                  'key' => $key,
-                  'created_at' => $timestamp,
+                $object = ItemHistory::join('items', 'items.id', 'item_histories.item_id')
+                ->firstWhere([
+                    'items.key' => $key,
+                    'timestamp' => $timestamp,
                 ]);
             } else {
                 $object = Item::firstWhere(['key' => $key]);

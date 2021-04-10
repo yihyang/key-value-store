@@ -16,13 +16,15 @@ class CreateItemHistoriesTable extends Migration
         Schema::create('item_histories', function (Blueprint $table) {
             $table->id();
 
-            $table->string('key');
+            $table->unsignedBigInteger('item_id');
             $table->json('value');
             $table->unsignedBigInteger('user_id');
+            $table->integer('timestamp');
 
             $table->timestamps();
 
-            $table->index(['key', 'created_at']);
+            $table->index(['item_id', 'timestamp']);
+            $table->foreign('item_id')->references('id')->on('items');
             $table->foreign('user_id')->references('id')->on('users');
 
         });

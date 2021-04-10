@@ -11,7 +11,6 @@ class Item extends Model
 {
     use HasFactory;
 
-
     protected $casts = [
         'value' => 'json'
     ];
