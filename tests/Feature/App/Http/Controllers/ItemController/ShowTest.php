@@ -51,6 +51,24 @@ class ShowTest extends TestCase
     }
 
     /**
+     * test value will be returned when valid key is provided
+     *
+     * @return void
+     */
+    public function test_json_value_will_be_returned_when_valid_key_is_provided()
+    {
+        $validItem = create(Item::class, ['key' => 'valid_json', 'value' => ['foo' => 'bar']]);
+
+        $this->json('GET', '/api/object/valid_json')
+          ->assertOk()
+          ->assertJson([
+              'data' => [
+                  'foo' => 'bar',
+              ]
+          ]);
+    }
+
+    /**
      * test value will be returned when valid key and timestamps are provided
      *
      * @return void
