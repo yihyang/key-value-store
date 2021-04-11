@@ -19,7 +19,7 @@ class ItemObserver
         ItemHistory::create([
             'item_id' => $item->id,
             'value' => $item->value,
-            'timestamp' => $item->created_at->timestamp,
+            'timestamp' => $item->timestamp,
             'user_id' => $item->user_id,
         ]);
 

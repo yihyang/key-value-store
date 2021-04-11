@@ -52,12 +52,16 @@ class ItemRequestHelper
 
         $result = [];
         foreach ($objects as $key => $value) {
-            $result[] = Item::create([
+            $result[] = Item::updateOrCreate(
+            [
                 'key' => $key,
+            ],
+            [
                 'value' => $value,
                 'timestamp' => $timestamp,
                 'user_id' => $userId,
-            ]);
+            ]
+        );
         }
 
         return $result;
