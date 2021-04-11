@@ -25,5 +25,6 @@ class ItemObserver
 
         ItemRequestHelper::clearCache($item->key);
         ItemRequestHelper::clearCache($item->key, $item->timestamp);
+        ItemRequestHelper::clearAllRecordsCache();
     }
 }

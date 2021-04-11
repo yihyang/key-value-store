@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\App\Http\Controllers\ItemController;
 
-use App\Models\User;
 use App\Models\Item;
+use App\Models\User;
 use Carbon\Carbon;
 use Tests\TestCase;
 
@@ -29,10 +29,10 @@ class ShowTest extends TestCase
     public function test_error_response_will_be_returned_when_invalid_key_is_provided()
     {
         $this->json('GET', '/api/object/invalid_key')
-          ->assertNotFound()
-          ->assertJson([
-              'error' => 'Object not found'
-          ]);
+            ->assertNotFound()
+            ->assertJson([
+                'error' => 'Object not found',
+            ]);
     }
 
     /**
@@ -45,11 +45,11 @@ class ShowTest extends TestCase
         $validItem = create(Item::class, ['key' => 'valid_key', 'value' => 'valid_value']);
 
         $this->json('GET', '/api/object/valid_key')
-          ->assertOk()
-          ->assertJson([
-              'message' => 'Successfully fetched object',
-              'data' => 'valid_value'
-          ]);
+            ->assertOk()
+            ->assertJson([
+                'message' => 'Successfully fetched object',
+                'data'    => 'valid_value',
+            ]);
     }
 
     /**
@@ -62,13 +62,13 @@ class ShowTest extends TestCase
         $validItem = create(Item::class, ['key' => 'valid_json', 'value' => ['foo' => 'bar']]);
 
         $this->json('GET', '/api/object/valid_json')
-          ->assertOk()
-          ->assertJson([
-              'message' => 'Successfully fetched object',
-              'data' => [
-                  'foo' => 'bar',
-              ]
-          ]);
+            ->assertOk()
+            ->assertJson([
+                'message' => 'Successfully fetched object',
+                'data'    => [
+                    'foo' => 'bar',
+                ],
+            ]);
     }
 
     /**
@@ -84,11 +84,11 @@ class ShowTest extends TestCase
         $validItem->update(['value' => 'valid_value_2']);
 
         $this->json('GET', '/api/object/valid_key_1?timestamp=111111')
-          ->assertOk()
-          ->assertJson([
-              'message' => 'Successfully fetched object',
-              'data' => 'valid_value_1'
-          ]);
+            ->assertOk()
+            ->assertJson([
+                'message' => 'Successfully fetched object',
+                'data'    => 'valid_value_1',
+            ]);
 
         Carbon::setTestNow();
     }
@@ -106,10 +106,10 @@ class ShowTest extends TestCase
         $validItem->update(['value' => 'valid_value_2']);
 
         $this->json('GET', '/api/object/valid_key_2?timestamp=3333333')
-          ->assertNotFound()
-          ->assertJson([
-              'error' => 'Object not found'
-          ]);
+            ->assertNotFound()
+            ->assertJson([
+                'error' => 'Object not found',
+            ]);
 
         Carbon::setTestNow();
     }

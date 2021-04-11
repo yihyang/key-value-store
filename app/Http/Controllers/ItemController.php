@@ -8,6 +8,20 @@ use Illuminate\Http\Request;
 class ItemController extends Controller
 {
     /**
+     * Get all records
+     *
+     * @param  Request $request Request Item
+     *
+     * @return Response
+     */
+    public function getAllRecords(Request $request)
+    {
+        $allRecords = ItemRequestHelper::getAllRecords();
+
+        return $this->respondSuccess("Successfully fetched object", $allRecords);
+    }
+
+    /**
      * Get a specific Item
      *
      * @param  Request $request Request Item
