@@ -18,6 +18,7 @@ class ShowTest extends TestCase
 
         $this->user = create(User::class);
         $this->actingAs($this->user, 'api');
+
     }
 
     /**
@@ -46,6 +47,7 @@ class ShowTest extends TestCase
         $this->json('GET', '/api/object/valid_key')
           ->assertOk()
           ->assertJson([
+              'message' => 'Successfully fetched object',
               'data' => 'valid_value'
           ]);
     }
@@ -62,6 +64,7 @@ class ShowTest extends TestCase
         $this->json('GET', '/api/object/valid_json')
           ->assertOk()
           ->assertJson([
+              'message' => 'Successfully fetched object',
               'data' => [
                   'foo' => 'bar',
               ]
@@ -76,13 +79,14 @@ class ShowTest extends TestCase
     public function test_value_will_be_returned_when_valid_key_timestamp_are_provided()
     {
         Carbon::setTestNow(Carbon::createFromTimestamp(111111));
-        $validItem = create(Item::class, ['key' => 'valid_key', 'value' => 'valid_value_1']);
+        $validItem = create(Item::class, ['key' => 'valid_key_1', 'value' => 'valid_value_1']);
         Carbon::setTestNow(Carbon::createFromTimestamp(222222));
-        $validItem = create(Item::class, ['key' => 'valid_key', 'value' => 'valid_value_2']);
+        $validItem->update(['value' => 'valid_value_2']);
 
-        $this->json('GET', '/api/object/valid_key?timestamp=111111')
+        $this->json('GET', '/api/object/valid_key_1?timestamp=111111')
           ->assertOk()
           ->assertJson([
+              'message' => 'Successfully fetched object',
               'data' => 'valid_value_1'
           ]);
 
@@ -97,11 +101,11 @@ class ShowTest extends TestCase
     public function test_error_response_will_be_returned_when_valid_key_but_invalid_timestamp_are_provided()
     {
         Carbon::setTestNow(Carbon::createFromTimestamp(111111));
-        $validItem = create(Item::class, ['key' => 'valid_key', 'value' => 'valid_value_1']);
+        $validItem = create(Item::class, ['key' => 'valid_key_2', 'value' => 'valid_value_1']);
         Carbon::setTestNow(Carbon::createFromTimestamp(222222));
-        $validItem = create(Item::class, ['key' => 'valid_key', 'value' => 'valid_value_2']);
+        $validItem->update(['value' => 'valid_value_2']);
 
-        $this->json('GET', '/api/object/valid_key?timestamp=3333333')
+        $this->json('GET', '/api/object/valid_key_2?timestamp=3333333')
           ->assertNotFound()
           ->assertJson([
               'error' => 'Object not found'

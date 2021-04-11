@@ -28,6 +28,7 @@ class ItemFactory extends Factory
         return [
             'key' => $this->faker->regexify('[A-Za-z0-9]{5,10}'),
             'value' => ['test' => 'value'],
+            'timestamp' => now()->timestamp,
             'user_id' => $user->id,
         ];
     }

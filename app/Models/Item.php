@@ -15,6 +15,13 @@ class Item extends Model
         'value' => 'json'
     ];
 
+    protected $fillable = [
+        'key',
+        'timestamp',
+        'value',
+        'user_id',
+    ];
+
     /**
      * Histories record of the object
      *

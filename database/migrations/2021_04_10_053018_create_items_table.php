@@ -19,10 +19,11 @@ class CreateItemsTable extends Migration
             $table->string('key');
             $table->json('value');
             $table->unsignedBigInteger('user_id');
+            $table->integer('timestamp');
 
             $table->timestamps();
 
-            $table->index('key');
+            $table->unique('key');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

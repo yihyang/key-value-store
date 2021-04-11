@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Item;
 use App\Models\ItemHistory;
+use App\Helpers\ItemRequestHelper;
 
 class ItemObserver
 {
@@ -21,5 +22,8 @@ class ItemObserver
             'timestamp' => $item->created_at->timestamp,
             'user_id' => $item->user_id,
         ]);
+
+        ItemRequestHelper::clearCache($item->key);
+        ItemRequestHelper::clearCache($item->key, $item->timestamp);
     }
 }
