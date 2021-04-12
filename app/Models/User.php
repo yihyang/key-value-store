@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Item;
+use App\Models\ItemHistory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -40,4 +42,23 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Item that was created by this user
+     * @return HasMany
+     */
+    public function items()
+    {
+        return $this->hasMany(Item::class);
+    }
+
+    /**
+     * Item History that was created by this user
+     *
+     * @return HasMany
+     */
+    public function itemHistories()
+    {
+        return $this->hasMany(ItemHistory::class);
+    }
 }
