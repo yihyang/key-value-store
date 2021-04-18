@@ -19,7 +19,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Copy ENV Laravel Configuration for CI
-        run: cp .env.ci .env.testing
+        run: |
+          cp .env.ci .env.testing
+          cp .env.ci .env
       - name: Install Dependencies (PHP vendors)
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
       - name: Generate key
