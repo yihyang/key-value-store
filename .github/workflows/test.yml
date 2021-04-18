@@ -24,7 +24,7 @@ jobs:
       - name: Install Dependencies (PHP vendors)
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
       - name: Generate key
-        run: php artisan key:generate
+        run: php artisan key:generate --env=testing
       - name: Migrate
         run: php artisan migrate --env=testing
       - name: Execute tests (Unit and Feature tests) via PHPUnit
