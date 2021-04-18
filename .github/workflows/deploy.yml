@@ -18,5 +18,6 @@ jobs:
           script: |
             cd ${{ secrets.FOLDER_DIR }}
             git checkout -f
-            git reset --hard origin/master
+            git reset --hard
+            git pull origin master
             php artisan migrate --force
