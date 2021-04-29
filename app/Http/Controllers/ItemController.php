@@ -55,6 +55,11 @@ class ItemController extends Controller
 
         $userId = auth()->user()->id;
 
+        // remove empty key & value
+        $requestBody = collect($requestBody)->filter(function($key, $value) {
+            return !$key || $value;
+        })->toArray();
+
         if (empty($requestBody) || !$this->isAssociative($requestBody)) {
             return $this->respondError('Invalid request body provided', 422);
         }
