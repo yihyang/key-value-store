@@ -1,0 +1,15 @@
+version: "3.5"
+services:
+  ksv:
+    container_name: ksv
+    image: 123456789012.dkr.ecr.ap-southeast-1.amazonaws.com/carro/key-value-store:${KEY_VALUE_STORE_VERSION}
+    restart: always
+    ports:
+      - 8080:80
+    env_file:
+      - .env
+
+  redis:
+    container_name: redis
+    restart: always
+    image: 'redis:5'

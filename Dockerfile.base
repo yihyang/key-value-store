@@ -1,0 +1,48 @@
+FROM php:7.4-apache-buster AS php-base
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    vim \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    beanstalkd \
+    supervisor \
+    redis \
+    imagemagick \
+    libmagickwand-dev \
+    python-dev \
+    python-pip \
+    python-setuptools \
+    supervisor \
+    libzip-dev \
+    unzip
+
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath intl zip && \
+    docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    docker-php-ext-install -j$(nproc) gd
+
+# enable redis
+RUN pecl install redis \
+    && docker-php-ext-enable redis \
+    && pecl install imagick \
+    && docker-php-ext-enable imagick
+
+# handle apache
+ENV APACHE_DOCUMENT_ROOT=/var/www/console/public
+
+RUN rm -rfv /etc/apache2/sites-enabled/*.conf && \
+    a2enmod rewrite && \
+    a2enmod headers
+
+# Get latest Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+CMD ["/bin/true"]
