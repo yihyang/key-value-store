@@ -1,0 +1,85 @@
+version: '3.8'
+volumes:
+    data-vol: # Volume to host db service data locally.
+      driver: local
+    php_dependencies: # Volume to cache vendor locally.
+      driver: local
+services:
+  proxy-app:
+    build:
+      context: ./
+      dockerfile: dockers/Dockerfile
+      args:
+        BASE_TAG: latest
+        IMAGE_NAME: boilerplate/proxy-php-base-local
+        ENV: local
+        PORT: 80
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1024M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    volumes:
+      - ./:/var/www
+      - ./environments/.env.local:/var/www/.env
+      - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+      - ./supervisor/conf.d/laravel-worker.conf:/etc/supervisor/conf.d/laravel-worker.conf
+      # To avoid syncing the vendor directory
+      # - php_dependencies:/var/www/vendor
+    environment:
+      COMPOSER_ALLOW_SUPERUSER: 1
+    ports:
+      - "80:80"
+    links:
+      - db
+      - redis
+      - minio
+    container_name: boilerplate-proxy-php-cont
+  db:
+    image: boilerplate/db-local:latest
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+        - "3306:3306" # host:container
+    volumes:
+      - data-vol:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: test_db
+      MYSQL_USER: test_db
+      MYSQL_PASSWORD: test_db
+      MYSQL_ROOT_PASSWORD: test_db
+    container_name: boilerplate-db-cont
+  redis:
+    image: "redis:alpine"
+    ports:
+     - "6379:6379"
+    volumes:
+     - $PWD/redis-data:/var/lib/redis
+    environment:
+     - REDIS_REPLICATION_MODE=master
+    container_name: boilerplate-cache-cont
+  minio:
+    image: minio/minio:latest
+    restart: always
+    command: server --console-address ":9001" /data
+    ports:
+      - 9000:9000
+      - 9001:9001
+    environment:
+      MINIO_ACCESS_KEY: HGAFFGSUDUIEIEHDGDD
+      MINIO_SECRET_KEY: yweiowuedwdTFGBHJWQJDTWGEDBHEJNDNE
+    volumes:
+      - ./minio:/minio
+    container_name: boilerplate-minio-cont
+  # docs:
+  #   image: "volbrene/redoc"
+  #   ports:
+  #    - "8080:80"
+  #   volumes:
+  #    - $PWD/apidocs:/var/www/html/static/swagger-files
+  #   environment:
+  #    - "URLS=[{url: '/static/swagger-files/openapi.yaml', name: 'T-PecAPI'}]"
+  #   container_name: boilerplate-docs-cont

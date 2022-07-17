@@ -13,6 +13,6 @@ npm-debug.log
 yarn-error.log
 .DS_Store
 .vscode
-storage/*
-/storage
-
+/storage/docs/api.json
+/storage/docs/admin.json
+/storage/*.key

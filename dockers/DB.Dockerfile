@@ -1,0 +1,8 @@
+#ARGS expected
+ARG IMAGE_NAME
+
+FROM ${IMAGE_NAME}
+
+ARG PORT
+
+EXPOSE ${PORT}

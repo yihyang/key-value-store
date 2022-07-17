@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ItemRequestHelper;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class ItemController extends Controller
 {
@@ -81,5 +82,9 @@ class ItemController extends Controller
      */
     private function isAssociative($arr) {
         foreach ($arr as $key => $value) { if (is_string($key)) return true; } return false;
+    }
+
+    public function test(){
+        return User::all();
     }
 }
